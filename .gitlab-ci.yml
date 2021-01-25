@@ -1,0 +1,22 @@
+stages:
+  - build
+
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == "master"
+
+services:
+  - name: docker:dind
+    alias: dind
+
+deploy:
+  image: docker:19.03.5
+  stage: build
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - docker build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE:latest  
