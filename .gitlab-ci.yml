@@ -23,6 +23,7 @@ deploy:
     - docker pull $CI_REGISTRY_IMAGE:latest || true
     - docker build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE:latest
 
 services: # use services to link the dvwa container to the dast job
   - name: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
