@@ -1,5 +1,6 @@
 stages:
   - build
+  - scan
 
 workflow:
   rules:
@@ -11,6 +12,7 @@ services:
   - name: docker:dind
     alias: dind
 
+# Deploys the DVWA container to the GitLab container registry
 deploy:
   image: docker:19.03.5
   stage: build
@@ -19,4 +21,23 @@ deploy:
     - docker pull $CI_REGISTRY_IMAGE:latest || true
     - docker build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-    - docker push $CI_REGISTRY_IMAGE:latest  
+
+# Job name must be dast to start the dast scan
+dast:
+  stage: scan
+  services: # use services to link the dvwa container to the dast job
+    - name: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+      alias: vulnapp
+  variables:
+    DAST_FULL_SCAN_ENABLED: "true" # do a full scan
+    DAST_ZAP_USE_AJAX_SPIDER: "true" # use the ajax spider
+    DAST_WEBSITE: "http://vulnapp/" # set the target website
+    DAST_AUTH_URL: "http://vulnapp/login.php" # set the target authentication URL
+    # Use CI/CD variables to protect the password (Settings -> CI/CD -> Variables)
+    DAST_USERNAME: $DVWA_USERNAME  
+    DAST_PASSWORD: $DVWA_PASSWORD
+    # Find the username and password fields in the /login.php page
+    DAST_USERNAME_FIELD: "username"
+    DAST_PASSWORD_FIELD: "password"
+    DAST_AUTH_EXCLUDE_URLS: "http://vulnapp/logout.php,http://vulnapp/setup.php,http://vulnapp/security.php"
+
