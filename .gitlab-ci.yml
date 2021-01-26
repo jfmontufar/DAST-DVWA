@@ -2,18 +2,22 @@ stages:
   - build
   - dast
 
+include: 
+  - template: DAST.gitlab-ci.yml
+
 workflow:
   rules:
     - if: $CI_MERGE_REQUEST_ID
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == "master"
 
-services:
-  - name: docker:dind
-    alias: dind
+
 
 # Deploys the DVWA container to the GitLab container registry
 deploy:
+  services:
+  - name: docker:dind
+    alias: dind
   image: docker:19.03.5
   stage: build
   script:
@@ -40,4 +44,6 @@ dast scan:
     DAST_USERNAME_FIELD: "username"
     DAST_PASSWORD_FIELD: "password"
     DAST_AUTH_EXCLUDE_URLS: "http://vulnapp/logout.php,http://vulnapp/setup.php,http://vulnapp/security.php"
-
+  # we must override the script field since we are overriding the services for the dast job
+  script:
+    - /analyze 
