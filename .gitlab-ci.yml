@@ -1,6 +1,6 @@
 stages:
   - build
-  - scan
+  - dast
 
 workflow:
   rules:
@@ -22,9 +22,9 @@ deploy:
     - docker build --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
 
-# Job name must be dast to start the dast scan
-dast:
-  stage: scan
+# Stage name must be dast to start the dast scan
+dast scan:
+  stage: dast
   services: # use services to link the dvwa container to the dast job
     - name: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
       alias: vulnapp
