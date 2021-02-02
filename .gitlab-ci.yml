@@ -41,4 +41,4 @@ variables:
   DAST_USERNAME_FIELD: "username"
   DAST_PASSWORD_FIELD: "password"
   # Exclude the logout, setup and security pages so it doesn't modify the target application or scanner session.
-  DAST_AUTH_EXCLUDE_URLS: "http://vulnapp/logout.php,http://vulnapp/setup.php,http://vulnapp/security.php"
+  DAST_EXCLUDE_URLS: "http://vulnapp/logout.php,http://vulnapp/setup.php,http://vulnapp/security.php"
