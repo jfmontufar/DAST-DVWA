@@ -1,4 +1,4 @@
-FROM debian:9.2
+FROM debian:10.13
 
 RUN apt-get update && \
     apt-get upgrade -y && \
@@ -19,7 +19,7 @@ RUN apt-get update && \
     && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    sed -i 's/allow_url_include = Off/allow_url_include = On/' /etc/php/7.0/apache2/php.ini
+    find /etc/php/ -type f -name "php.ini" -exec sed -i 's/allow_url_include = Off/allow_url_include = On/' {} \;
 
 COPY . /var/www/html
 
