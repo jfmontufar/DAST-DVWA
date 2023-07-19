@@ -142,6 +142,8 @@ _...can easily be brute forced ;)_
 
 Login URL: http://127.0.0.1/dvwa/login.php
 
+To run authenticated DAST scan, make sure to set `DVWA_PASSWORD` and `DVWA_USERNAME` variables under project settings -> CI/CD -> Variables.
+
 ### Troubleshooting
 
 For the latest troubleshooting information please visit:
