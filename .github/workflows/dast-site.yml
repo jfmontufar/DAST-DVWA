@@ -1,0 +1,27 @@
+name: 20 - DAST Scan Website
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+    dast-scan:
+      name: DAST Scan of a Website
+      runs-on: ubuntu-latest
+      steps:
+        - name: OWASP ZAP full Scan
+          uses: zaproxy/action-full-scan@v0.5.1
+          with:
+            target: 'https://www.zaproxy.org/'
+        
+        - name: Copy reports
+          run: |
+            mkdir reports
+            cp report_json.json reports/
+            cp report_html.html reports/
+            cp report_md.md reports/
+    
+        - name: Upload reports
+          uses: actions/upload-artifact@v3
+          with:
+            name: Website_DAST_Report
+            path: reports

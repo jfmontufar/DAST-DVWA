@@ -13,10 +13,15 @@ jobs:
     uses: ./.github/workflows/docker.yml
     secrets: inherit
 
-  dast:
+  dast-site:
+    name: Scanning Website with DAST
+    uses: ./.github/workflows/dast-site.yml
+    secrets: inherit
+
+  dast-docker:
     needs: [docker]
-    name: DAST Scan
-    uses: ./.github/workflows/dast.yml
+    name: Scanning Docker Image with DAST
+    uses: ./.github/workflows/dast-docker.yml
     secrets: inherit
     with:
       image-tag: ${{ needs.docker.outputs.image-tag }}
