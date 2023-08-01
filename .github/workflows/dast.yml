@@ -37,7 +37,7 @@ jobs:
       - run: docker rm demoApp | true && docker run -d -p 80:80 --name demoApp ${{ env.IMAGE_TAG }}         
 
       - name: wait for container to start
-        run: sleep 120 
+        run: sleep 60 
      
       - name: Run ZAP OWASP full scan
         uses: zaproxy/action-full-scan@v0.5.1
@@ -51,7 +51,6 @@ jobs:
             auth.password="${{ secrets.PASSWORD }}" \
             auth.username_field="username" \
             auth.password_field="password" \
-            auth.submit_field="Login" \
             auth.exclude="http://localhost/logout.php,http://localhost/setup.php,http://localhost/security.php"'
           allow_issue_writing: true
 
