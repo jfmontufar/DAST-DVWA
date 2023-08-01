@@ -46,13 +46,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           target: 'http://localhost'
           cmd_options: |
-            -a -j -l WARN -z "auth.loginurl=http://localhost/login.php \
-            auth.username=${{ secrets.USERNAME }} \
-            auth.password=${{ secrets.PASSWORD }} \ 
-            auth.username_field=username \ 
-            auth.password_field=password \ 
-            auth.submit_field=Login \
-            auth.exclude=http://localhost/logout.php,http://localhost/setup.php,http://localhost/security.php"
+            -a -j -l WARN -z "auth.loginurl=http://localhost/login.php auth.username=${{ secrets.USERNAME }} auth.password=${{ secrets.PASSWORD }} auth.username_field=username auth.password_field=password auth.submit_field=Login auth.exclude=http://localhost/logout.php,http://localhost/security.php"
           allow_issue_writing: true
 
       - name: Copy reports
