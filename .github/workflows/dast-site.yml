@@ -11,7 +11,7 @@ jobs:
         - name: OWASP ZAP full Scan
           uses: zaproxy/action-full-scan@v0.5.1
           with:
-            target: 'https://www.zaproxy.org/'
+            target: '${{ env.WEBSITE_URL }}'
         
         - name: Copy reports
           run: |
