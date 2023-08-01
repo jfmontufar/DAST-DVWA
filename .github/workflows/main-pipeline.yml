@@ -23,6 +23,7 @@ jobs:
     name: Scanning Docker Image with DAST
     uses: ./.github/workflows/dast-docker.yml
     secrets: inherit
+    variables: inherit
     with:
       image-tag: ${{ needs.docker.outputs.image-tag }}
  
