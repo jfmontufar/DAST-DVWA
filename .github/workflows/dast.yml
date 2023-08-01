@@ -36,8 +36,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - run: docker rm demoApp | true && docker run -d -p 80:80 --name demoApp ${{ env.IMAGE_TAG }}         
 
-      - name: wait for container to start
-        run: sleep 60 
+      - name: wait for container to start and create reports directory
+        run: sleep 60 && mkdir reports
      
       - name: Run ZAP OWASP full scan
         uses: zaproxy/action-full-scan@v0.5.1
@@ -45,20 +45,21 @@ jobs:
           docker_name: 'owasp/zap2docker-stable'
           token: ${{ secrets.GITHUB_TOKEN }}
           target: 'http://localhost'
-          cmd_options: '-a -j -l WARN -z "-addoninstallall \
-            auth.loginurl=http://localhost/login.php \
-            auth.username="${{ secrets.USERNAME }}" \
-            auth.password="${{ secrets.PASSWORD }}" \
-            auth.username_field="username" \
-            auth.password_field="password" \
-            auth.exclude="http://localhost/logout.php,http://localhost/setup.php,http://localhost/security.php"'
+          cmd_options: | 
+            -r reports/dvwa-report.html -J reports/dvwa-report.json -a -j -l WARN -z "-config auth.loginurl=http://localhost/login.php \
+            -config auth.username="${{ secrets.USERNAME }}" \
+            -config auth.password="${{ secrets.PASSWORD }}" \
+            -config auth.username_field="username" \
+            -config auth.password_field="password" \
+            -config auth.submit_field="Login" \
+            -config auth.exclude="http://localhost/logout.php,http://localhost/setup.php,http://localhost/security.php"
           allow_issue_writing: true
-
-      - name: Upload html report
+          
+      - name: Upload reports
         uses: actions/upload-artifact@v3
         with:
-          name: DAST_Report.html
-          path: report_html.html
+          name: DVWA_DAST_Report
+          path: reports
 
       - name: stop docker
         if: always()
