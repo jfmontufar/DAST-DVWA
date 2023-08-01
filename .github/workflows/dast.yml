@@ -40,7 +40,6 @@ jobs:
         run: |
           sleep 60 
           mkdir reports
-          chown 666 reports
      
       - name: Run ZAP OWASP full scan
         uses: zaproxy/action-full-scan@v0.5.1
