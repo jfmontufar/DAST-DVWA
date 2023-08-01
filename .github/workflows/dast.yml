@@ -49,7 +49,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           target: 'http://localhost'
           cmd_options: | 
-            -r reports/dvwa-report.html -J reports/dvwa-report.json -a -j -l WARN -z '"-config auth.loginurl=http://localhost/login.php -config auth.username="${{ secrets.USERNAME }}" -config auth.password="${{ secrets.PASSWORD }}" -config auth.username_field="username" -config auth.password_field="password" -config auth.submit_field="Login" -config auth.exclude="http://localhost/logout.php,http://localhost/setup.php,http://localhost/security.php"'
+            -r reports/dvwa-report.html -J reports/dvwa-report.json -a -j -l WARN -z '-config auth.loginurl=http://localhost/login.php -config auth.username="${{ secrets.USERNAME }}" -config auth.password="${{ secrets.PASSWORD }}" -config auth.username_field="username" -config auth.password_field="password" -config auth.submit_field="Login" -config auth.exclude="http://localhost/logout.php,http://localhost/setup.php,http://localhost/security.php"'
           allow_issue_writing: true
           
       - name: Upload reports
